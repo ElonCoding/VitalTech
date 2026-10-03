@@ -7,19 +7,52 @@ function HomePage() {
     return (
         <>
         <section className="hero-section">
+                {/* Background Cyber Glowing Orbs */}
+                <div className="cyber-orb orb-1"></div>
+                <div className="cyber-orb orb-2"></div>
+                <div className="cyber-orb orb-3"></div>
+
                 <div className="hero-content-wrapper">
                     <div className="hero-content-left">
+                        <div className="hero-status-pill">
+                            <span className="pulse-dot"></span>
+                            <span>Next-Gen Neural Diagnostics 4.0</span>
+                        </div>
                         <h1>VitalCheck</h1>
                         <p className="hero-subtitle">Your Trusted Partner in AI-Powered Healthcare</p>
-                        <p className="hero-description">Experience the future of healthcare with our advanced AI disease detection and comprehensive patient management system.</p>
+                        <p className="hero-description">Experience the future of healthcare with our advanced AI disease detection, multi-modal scan analytics, and comprehensive patient management.</p>
+                        
+                        <div className="hero-metrics-strip">
+                            <div className="metric-box">
+                                <span className="metric-val">99.4%</span>
+                                <span className="metric-lbl">Accuracy</span>
+                            </div>
+                            <div className="metric-box">
+                                <span className="metric-val">4</span>
+                                <span className="metric-lbl">Neural Nets</span>
+                            </div>
+                            <div className="metric-box">
+                                <span className="metric-val">&lt; 2s</span>
+                                <span className="metric-lbl">Inference</span>
+                            </div>
+                        </div>
+
                         <div className='hero-btn'>
-                        <button className="cta-button" onClick={() => navigate('/signup')}>Register Now</button>
-                        <button className="live-button" onClick={() => navigate('/login')}>Try Live Demo</button>
+                            <button className="cta-button" onClick={() => navigate('/signup')}>Register Now</button>
+                            <button className="live-button" onClick={() => navigate('/login')}>Try Live Demo</button>
                         </div>
                     </div>
                     <div className="hero-content-right">
                         <MedicalHero3D />
                     </div>
+                </div>
+
+                {/* Animated Bottom ECG Heartbeat Scanner Line */}
+                <div className="hero-ecg-strip">
+                    <svg className="hero-ecg-svg" preserveAspectRatio="none" viewBox="0 0 1200 40">
+                        <path d="M0,20 L280,20 L290,6 L300,34 L310,10 L320,26 L330,20 L620,20 L630,6 L640,34 L650,10 L660,26 L670,20 L960,20 L970,6 L980,34 L990,10 L1000,26 L1010,20 L1200,20" />
+                    </svg>
+                    <div className="hero-ecg-scanner"></div>
                 </div>
             </section>
         <div className="landing-page">

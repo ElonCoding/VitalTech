@@ -1,8 +1,8 @@
 .medical-3d-wrapper {
     position: relative;
     width: 100%;
-    max-width: 580px;
-    height: 520px;
+    max-width: 620px;
+    height: 560px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,7 +30,50 @@
     width: 100% !important;
     height: 100% !important;
     outline: none;
-    filter: drop-shadow(0 0 35px rgba(14, 165, 233, 0.35));
+    filter: drop-shadow(0 0 40px rgba(0, 240, 255, 0.45));
+}
+
+/* Sci-Fi Target Reticle Corners */
+.hologram-reticle {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    right: 25px;
+    bottom: 75px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.reticle-corner {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-color: rgba(0, 240, 255, 0.4);
+    border-style: solid;
+}
+
+.corner-tl {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px;
+}
+
+.corner-tr {
+    top: 0;
+    right: 0;
+    border-width: 2px 2px 0 0;
+}
+
+.corner-bl {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 2px 2px;
+}
+
+.corner-br {
+    bottom: 0;
+    right: 0;
+    border-width: 0 2px 2px 0;
 }
 
 /* Glassmorphism Hologram HUD Chips */
@@ -39,38 +82,54 @@
     z-index: 10;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.6rem 1rem;
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    gap: 0.7rem;
+    padding: 0.65rem 1.1rem;
+    background: rgba(10, 15, 30, 0.75);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(0, 240, 255, 0.3);
     border-radius: 9999px;
     color: #ffffff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     pointer-events: none;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-    animation: floatChip 4s ease-in-out infinite;
+    transition: all 0.3s ease;
 }
 
 .chip-top-right {
-    top: 15px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
 }
 
 .chip-bottom-left {
-    bottom: 20px;
-    left: 10px;
+    bottom: 70px;
+    left: 12px;
     border-radius: 16px;
-    padding: 0.7rem 1.1rem;
+    padding: 0.75rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.chip-bottom-right {
-    bottom: 20px;
-    right: 15px;
-    padding: 0.5rem 0.9rem;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.85);
+.ecg-mini-monitor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    padding-right: 0.8rem;
+}
+
+.ecg-trace {
+    width: 65px;
+    height: 18px;
+    filter: drop-shadow(0 0 6px #00f0ff);
+}
+
+.bpm-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #00f0ff;
+    letter-spacing: 0.05em;
+    font-family: monospace;
 }
 
 .chip-text {
@@ -100,14 +159,15 @@
 .chip-badge {
     font-size: 0.75rem;
     font-weight: 600;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(16, 185, 129, 0.3));
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    padding: 0.2rem 0.6rem;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(16, 185, 129, 0.25));
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    padding: 0.25rem 0.65rem;
     border-radius: 9999px;
-    color: #38bdf8;
+    color: #00f0ff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
 }
 
-/* Pulsing Dots */
+/* Pulsing Indicators */
 .chip-indicator {
     width: 8px;
     height: 8px;
@@ -115,16 +175,10 @@
     display: inline-block;
 }
 
-.pulse-green {
-    background: #10b981;
-    box-shadow: 0 0 12px #10b981;
-    animation: indicatorPulse 2s infinite;
-}
-
 .pulse-cyan {
-    background: #0ea5e9;
-    box-shadow: 0 0 12px #0ea5e9;
-    animation: indicatorPulse 2s infinite 0.5s;
+    background: #00f0ff;
+    box-shadow: 0 0 12px #00f0ff;
+    animation: indicatorPulse 2s infinite;
 }
 
 @keyframes indicatorPulse {
@@ -138,13 +192,48 @@
     }
 }
 
-@keyframes floatChip {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
+/* Hologram Interactive Mode Switcher Bar */
+.hologram-mode-bar {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(10, 15, 30, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    padding: 0.4rem 0.6rem;
+    border-radius: 9999px;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.mode-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.mode-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(16, 185, 129, 0.3));
+    border-color: rgba(0, 240, 255, 0.6);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    font-weight: 600;
 }
 
 /* WebGL Fallback */
@@ -156,8 +245,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(16, 185, 129, 0.05) 70%, transparent 100%);
-    border: 2px dashed rgba(56, 189, 248, 0.3);
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.2) 0%, rgba(16, 185, 129, 0.05) 70%, transparent 100%);
+    border: 2px dashed rgba(0, 240, 255, 0.4);
     position: relative;
     text-align: center;
     color: #ffffff;
@@ -173,7 +262,7 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 1px solid rgba(56, 189, 248, 0.4);
+    border: 1px solid rgba(0, 240, 255, 0.4);
     animation: pingRing 3s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
@@ -186,20 +275,24 @@
 
 @media (max-width: 768px) {
     .medical-3d-wrapper {
-        height: 380px;
+        height: 420px;
         max-width: 100%;
     }
     .chip-top-right {
-        top: 5px;
-        right: 5px;
-        font-size: 0.75rem;
+        top: 6px;
+        right: 6px;
+        font-size: 0.72rem;
     }
     .chip-bottom-left {
-        bottom: 5px;
-        left: 5px;
-        padding: 0.4rem 0.8rem;
-    }
-    .chip-bottom-right {
         display: none;
+    }
+    .hologram-mode-bar {
+        bottom: 4px;
+        gap: 0.3rem;
+        padding: 0.3rem 0.4rem;
+    }
+    .mode-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
     }
 }
