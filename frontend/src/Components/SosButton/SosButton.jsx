@@ -120,7 +120,7 @@ function SosButton() {
 
   const shareLocation = async () => {
     if (!location) return;
-    const text = `🆘 EMERGENCY! I need help!\nMy location: https://www.google.com/maps?q=${location.lat},${location.lng}\n- ${name || 'VitalCheck User'}`;
+    const text = `🆘 EMERGENCY! I need help!\nMy location: https://www.google.com/maps?q=${location.lat},${location.lng}\n- ${name || 'VitalTech User'}`;
     
     if (navigator.share) {
       try {

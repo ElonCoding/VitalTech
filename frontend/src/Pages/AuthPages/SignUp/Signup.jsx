@@ -132,7 +132,7 @@ function Signup() {
             <SuccessModal isOpen={showSuccessModal} message="Registration Successful!" />
             <div className='signup-box'>
                 <div className='signup-header'>
-                    <h1>VitalCheck</h1>
+                    <h1>VitalTech</h1>
                     <p>Create your healthcare account</p>
                 </div>
                 <form onSubmit={handleSubmit} className='signup-form'>

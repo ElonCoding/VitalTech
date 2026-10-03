@@ -413,7 +413,7 @@ function DiseaseFinderReports() {
           </div>
         )}
         <div className='supported-types'>
-          <h2>What You Can Analyze with VitalCheck Reports</h2>
+          <h2>What You Can Analyze with VitalTech Reports</h2>
           <div className='type-cards'>
             <div className='type-card'>
               <div className='card-icon'>🩸</div>

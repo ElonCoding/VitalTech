@@ -73,7 +73,7 @@ function Login() {
             <SuccessModal isOpen={showSuccessModal} />
             <div className='login-box'>
                 <div className='login-header'>
-                    <h1>VitalCheck</h1>
+                    <h1>VitalTech</h1>
                     <p>Welcome back to your healthcare dashboard</p>
                 </div>
                 <form onSubmit={handleSubmit} className='login-form'>

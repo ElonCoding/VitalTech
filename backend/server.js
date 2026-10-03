@@ -86,12 +86,12 @@ app.post('/forgot-password', async (req, res) => {
     });
 
     const mailOptions = {
-        from: 'VitalCheck <70001933arin@gmail.com>',
+        from: 'VitalTech <70001933arin@gmail.com>',
         to: email,
-        subject: 'VitalCheck Password Reset OTP',
+        subject: 'VitalTech Password Reset OTP',
         html: `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; padding: 32px; border-radius: 10px; max-width: 480px; margin: auto; border: 1px solid #e7eaf0;">
-                <h2 style="color: #2563eb; text-align: center;">VitalCheck Password Reset</h2>
+                <h2 style="color: #2563eb; text-align: center;">VitalTech Password Reset</h2>
                 <p style="font-size: 1.1rem; color: #222;">Hello,</p>
                 <p style="font-size: 1.1rem; color: #222;">We received a request to reset your password. Please use the OTP below to proceed:</p>
                 <div style="text-align: center; margin: 32px 0;">
@@ -99,7 +99,7 @@ app.post('/forgot-password', async (req, res) => {
                 </div>
                 <p style="font-size: 1.05rem; color: #444;">This OTP is valid for <b>10 minutes</b>. If you did not request a password reset, you can safely ignore this email.</p>
                 <hr style="margin: 24px 0; border: none; border-top: 1px solid #e7eaf0;" />
-                <p style="font-size: 0.98rem; color: #888; text-align: center;">Thank you for using <b>VitalCheck</b>.<br/>Stay healthy, stay secure!</p>
+                <p style="font-size: 0.98rem; color: #888; text-align: center;">Thank you for using <b>VitalTech</b>.<br/>Stay healthy, stay secure!</p>
                 <p style="font-size: 0.95rem; color: #b91c1c; text-align: center; margin-top: 18px;">If you do not see this email in your inbox, please check your <b>Spam</b> or <b>Junk</b> folder.</p>
             </div>
         `
@@ -145,7 +145,7 @@ app.post('/reset-password', async (req, res) => {
 });
 function generatePatientEmail() {
     const unique = Math.floor(100000 + Math.random() * 900000);
-    return `patient${unique}@vitalcheck.com`;
+    return `patient${unique}@vitaltech.com`;
 }
 function generatePassword(length = 8) {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

@@ -446,7 +446,7 @@ export default function MedicalHero3D() {
                     <div className="medical-3d-fallback">
                         <div className="fallback-pulse-ring"></div>
                         <div className="fallback-dna-icon">🧬</div>
-                        <p>VitalCheck 3D Neural Engine Active</p>
+                        <p>VitalTech 3D Neural Engine Active</p>
                     </div>
                 )}
             </div>

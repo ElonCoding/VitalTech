@@ -3,7 +3,7 @@ import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import './Navbar.css';
 import { FaBars, FaTimes, FaUser } from 'react-icons/fa';
-import logo from '../../assets/VitalCheck.png'
+
 
 const Navbar = () => {
   const [theme, setTheme] = useState('light');
@@ -29,9 +29,11 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="logo">
-          {/* <span className="logo-text">VitalCheck</span> */}
-          <img src={logo} alt=""/>
+        <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
+          <span className="logo-brand-vitaltech">
+            <span className="logo-brand-icon">⚡</span>
+            VitalTech
+          </span>
         </Link>
 
         <button

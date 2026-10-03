@@ -18,7 +18,7 @@ function HomePage() {
                             <span className="pulse-dot"></span>
                             <span>Next-Gen Neural Diagnostics 4.0</span>
                         </div>
-                        <h1>VitalCheck</h1>
+                        <h1>VitalTech</h1>
                         <p className="hero-subtitle">Your Trusted Partner in AI-Powered Healthcare</p>
                         <p className="hero-description">Experience the future of healthcare with our advanced AI disease detection, multi-modal scan analytics, and comprehensive patient management.</p>
                         
@@ -85,7 +85,7 @@ function HomePage() {
             </section>
 
             <section className="benefits-section">
-                <h2>Why Choose VitalCheck?</h2>
+                <h2>Why Choose VitalTech?</h2>
                 <div className="benefits-grid">
                     <div className="benefit-item">
                         <h3>99% Accuracy</h3>
@@ -103,17 +103,17 @@ function HomePage() {
             </section>
 
             <section className="testimonials-section">
-                <h2>What Healthcare Professionals Say</h2>
+                <h2>Engineering & Innovation</h2>
                 <div className="testimonials-grid">
                     <div className="testimonial-card">
-                        <p>"VitalCheck has revolutionized how we detect and monitor diseases in our practice."</p>
-                        <div className="testimonial-author">Dr. Sarah Johnson</div>
-                        <div className="testimonial-role">Chief Medical Officer</div>
+                        <p>"VitalTech was architected to bridge cutting-edge deep learning neural networks with clinical-grade diagnostic intelligence."</p>
+                        <div className="testimonial-author">Parikshit Sharma</div>
+                        <div className="testimonial-role">Founder & Chief AI Architect, VitalTech</div>
                     </div>
                     <div className="testimonial-card">
-                        <p>"The patient management system has significantly improved our workflow efficiency."</p>
-                        <div className="testimonial-author">Dr. Michael Chen</div>
-                        <div className="testimonial-role">Primary Care Physician</div>
+                        <p>"Unified multi-modal intelligence for MRI, CT, X-Ray, and blood reports — engineered for instantaneous diagnostic inference."</p>
+                        <div className="testimonial-author">Parikshit Sharma</div>
+                        <div className="testimonial-role">Lead Fullstack & Systems Engineer</div>
                     </div>
                 </div>
             </section>
@@ -123,8 +123,9 @@ function HomePage() {
         <footer className="footer">
                 <div className="footer-content">
                     <div className="footer-section">
-                        <h3>VitalCheck</h3>
+                        <h3>VitalTech</h3>
                         <p>Empowering healthcare with AI innovation</p>
+                        <p style={{ marginTop: '0.5rem', color: '#00f0ff', fontSize: '0.88rem' }}>Creator: Parikshit Sharma</p>
                     </div>
                     <div className="footer-section">
                         <h4>Quick Links</h4>
@@ -137,12 +138,13 @@ function HomePage() {
                     </div>
                     <div className="footer-section">
                         <h4>Contact Us</h4>
+                        <p>Parikshit Sharma</p>
                         <p>Email: <a href="mailto:sharmaparikshit405@gmail.com">sharmaparikshit405@gmail.com</a></p>
                         <p>Phone: +91 8817763021</p>
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} VitalCheck. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} VitalTech • Created by Parikshit Sharma. All rights reserved.</p>
                 </div>
             </footer>
         </>

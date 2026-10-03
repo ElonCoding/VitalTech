@@ -16,13 +16,13 @@ async function seedUsers() {
         const testUsers = [
             {
                 name: "Admin User",
-                email: "admin@vitalcheck.com",
+                email: "admin@vitaltech.com",
                 password: "Password123!",
                 role: "admin"
             },
             {
                 name: "Doctor User",
-                email: "doctor@vitalcheck.com",
+                email: "doctor@vitaltech.com",
                 password: "Password123!",
                 role: "doctor"
             }

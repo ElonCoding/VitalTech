@@ -377,7 +377,7 @@ function DiseaseFinderScans() {
           </div>
         )}
         <div className='supported-types'>
-          <h2>What You Can Analyze with VitalCheck</h2>
+          <h2>What You Can Analyze with VitalTech</h2>
           <div className='type-cards'>
             {/* Supported combos only */}
             {SCAN_TYPES.filter(type => type.key !== 'other').map(type => (
