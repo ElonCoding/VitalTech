@@ -1,0 +1,11 @@
+{
+  "name": "vitaltech",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VitalTech - Next-Generation AI Healthcare & Diagnostic Intelligence Platform",
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "dev": "npm --prefix frontend run dev",
+    "install:all": "npm --prefix frontend install && npm --prefix backend install"
+  }
+}
