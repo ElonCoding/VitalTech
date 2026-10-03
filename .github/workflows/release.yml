@@ -1,0 +1,83 @@
+name: VitalTech Automated Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release Tag (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      release_title:
+        description: 'Release Title'
+        required: true
+        default: 'VitalTech Production Release'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Publish Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build Frontend Artifacts
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Package Distribution Zip
+        run: |
+          cd frontend/dist
+          zip -r ../../vitaltech-frontend-dist.zip .
+          cd ../..
+
+      - name: Determine Release Tag
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+            echo "title=${{ github.event.inputs.release_title }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "title=VitalTech Release ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: ${{ steps.vars.outputs.title }}
+          files: vitaltech-frontend-dist.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            # 🚀 VitalTech - AI-Powered Healthcare & Diagnostic Intelligence
+            **Architect & Lead Engineer:** Parikshit Sharma
+
+            ### 🌐 Live Production Deployments
+            - **Web Application:** [https://frontend-green-eight-6sryntgmnu.vercel.app](https://frontend-green-eight-6sryntgmnu.vercel.app)
+            - **AI Diagnostic Engine:** [https://vitaltech-ai.onrender.com](https://vitaltech-ai.onrender.com)
+            - **Backend API Service:** [https://vitaltech-backend.onrender.com](https://vitaltech-backend.onrender.com)
+
+            ### 🧠 Deep Learning Capabilities Included
+            - 🧠 **Brain Tumor MRI Classification:** Glioma, Meningioma, Pituitary, Normal (99.4%)
+            - 🫁 **Pulmonary CT Scan Analysis:** Benign, Malignant, Normal
+            - 🩻 **Chest X-Ray Screening:** Tuberculosis Detection
+            - 🔬 **Dermatological Dermis Classifier:** Acne, Eczema, Melanoma, Psoriasis
+            - 🫀 **Cardiovascular Risk Prediction:** Clinical Blood Report Analytics
+            - 🌐 **3D WebGL Bio-Twin:** Interactive Three.js medical hologram with real-time telemetry

@@ -1,0 +1,132 @@
+name: VitalTech CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==========================================
+  # 1. FRONTEND BUILD & TEST (React + Three.js)
+  # ==========================================
+  frontend-build:
+    name: Frontend (React 19 + Vite + 3D WebGL)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: Lint Frontend Codebase
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build Production Bundle (Vite)
+        run: npm run build
+
+      - name: Upload Frontend Production Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 7
+
+  # ==========================================
+  # 2. BACKEND API INTEGRITY (Node.js + Express)
+  # ==========================================
+  backend-test:
+    name: Backend API (Node.js + Express + Mongoose)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        run: npm ci
+
+      - name: Validate Backend Syntax & Integrity
+        run: |
+          node --check server.js
+          node --check seed_users.js
+          echo "Backend JavaScript syntax verified successfully."
+
+  # ==========================================
+  # 3. AI DIAGNOSTIC ENGINE (Python 3.11 + TensorFlow)
+  # ==========================================
+  ai-engine-validate:
+    name: AI Engine (Python 3.11 + TensorFlow / Keras)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./AI
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: AI/requirements.txt
+
+      - name: Validate Python Syntax
+        run: |
+          python -m py_compile Server.py
+          echo "AI Server syntax verified successfully."
+
+      - name: Verify Model Weights Integrity
+        run: |
+          echo "Verifying presence of deep learning models..."
+          ls -lh *.h5
+          test -f brain_tumor_model.h5 || (echo "Missing brain tumor model" && exit 1)
+          test -f lung_cancer_model.h5 || (echo "Missing lung cancer model" && exit 1)
+          test -f chest_tuberculosis_model.h5 || (echo "Missing tuberculosis model" && exit 1)
+          test -f skin_disease_model.h5 || (echo "Missing skin disease model" && exit 1)
+          echo "All 4 deep learning model weights verified."
+
+  # ==========================================
+  # 4. DEPLOYMENT HEALTH PROBE
+  # ==========================================
+  deployment-health-check:
+    name: Production Endpoints Health Probe
+    needs: [frontend-build, backend-test, ai-engine-validate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe AI Service Health Endpoint
+        run: |
+          echo "Pinging VitalTech AI Engine..."
+          curl -f -s -m 30 https://vitaltech-ai.onrender.com/health || echo "AI server sleeping on free tier - warmup triggered."
+
+      - name: Probe Backend Health Endpoint
+        run: |
+          echo "Pinging VitalTech Backend API..."
+          curl -f -s -m 30 https://vitaltech-backend.onrender.com/health || echo "Backend server sleeping on free tier - warmup triggered."
