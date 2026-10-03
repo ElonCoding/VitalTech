@@ -287,10 +287,13 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     // Self-ping every 14 min to prevent Render free tier from sleeping
     if (process.env.RENDER_EXTERNAL_URL) {
+        const https = require('https');
         setInterval(() => {
-            fetch(`${process.env.RENDER_EXTERNAL_URL}/health`)
-                .then(() => console.log('Keep-alive ping sent'))
-                .catch(err => console.error('Keep-alive failed:', err.message));
+            https.get(`${process.env.RENDER_EXTERNAL_URL}/health`, (res) => {
+                console.log('Keep-alive ping sent, status:', res.statusCode);
+            }).on('error', (err) => {
+                console.error('Keep-alive failed:', err.message);
+            });
         }, 14 * 60 * 1000);
     }
 });
