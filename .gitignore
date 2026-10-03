@@ -3,7 +3,7 @@ node_modules/
 .pnp
 .pnp.js
 
-# Datasets and models
+# Datasets and models (keep large/sensitive data out)
 AI/dataset/
 AI/dataset/**
 AI/Blood_Reports/
@@ -11,10 +11,10 @@ AI/Blood_Reports/**
 *blood_report*
 *Blood_Reports*
 blood_reports/
-AI/*.h5
 AI/__pycache__/
-*.h5
+__pycache__/
 *.pyc
+*.pyo
 
 # Environment files
 .env

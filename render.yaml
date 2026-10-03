@@ -14,3 +14,13 @@ services:
         value: https://frontend-green-eight-6sryntgmnu.vercel.app
       - key: PORT
         value: 3001
+
+  - type: web
+    name: vitaltech-ai
+    runtime: python
+    rootDir: AI
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn Server:app --bind 0.0.0.0:$PORT --timeout 120 --workers 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0

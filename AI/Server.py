@@ -1,63 +1,96 @@
 import os
-os.environ['KERAS_BACKEND'] = 'torch'
+os.environ['KERAS_BACKEND'] = 'tensorflow'
 import numpy as np
 import keras
-from keras import layers, models
 from flask import Flask, request, jsonify
 from PIL import Image
 import io
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 IMAGE_SIZE = (150, 150)
-BATCH_SIZE = 32
-EPOCHS = 40
 
 BRAIN_TUMOR_CLASSES = ['glioma', 'meningioma', 'notumor', 'pituitary']
 LUNG_CANCER_CLASSES = ['benign', 'malignant', 'normal']
 SKIN_DISEASE_CLASSES = ['acne', 'eczema', 'melanoma', 'normal', 'psoriasis']
 TUBERCULOSIS_CLASSES = ['normal', 'tuberculosis']
 
-brain_model_path = 'brain_tumor_model.h5'
-if not os.path.exists(brain_model_path):
-    raise FileNotFoundError(f'Brain tumor model file not found: {brain_model_path}')
+# Load image models gracefully
+def load_model_safe(path, name):
+    if not os.path.exists(path):
+        print(f'Warning: {name} model not found at {path}')
+        return None
+    try:
+        model = keras.models.load_model(path, compile=False)
+        print(f'{name} model loaded successfully!')
+        return model
+    except Exception as e:
+        print(f'Warning: Failed to load {name} model: {e}')
+        return None
 
-brain_model = keras.models.load_model(brain_model_path, compile=False)
-print('Brain tumor model loaded successfully!')
+brain_model = load_model_safe('brain_tumor_model.h5', 'Brain tumor')
+lung_model = load_model_safe('lung_cancer_model.h5', 'Lung cancer')
+skin_model = load_model_safe('skin_disease_model.h5', 'Skin disease')
+tb_model = load_model_safe('chest_tuberculosis_model.h5', 'Tuberculosis')
 
-lung_model_path = 'lung_cancer_model.h5'
-if not os.path.exists(lung_model_path):
-    # For now, let's create a placeholder or ignore if missing to allow server to start
-    print(f'Warning: Lung cancer model file not found: {lung_model_path}')
-    lung_model = None
-else:
-    lung_model = keras.models.load_model(lung_model_path, compile=False)
-    print('Lung cancer model loaded successfully!')
+# Load heart model gracefully
+heart_model = None
+heart_scaler = None
+heart_features = None
 
-skin_model_path = 'skin_disease_model.h5'
-if not os.path.exists(skin_model_path):
-    print(f'Warning: Skin disease model file not found: {skin_model_path}')
-    skin_model = None
-else:
-    skin_model = keras.models.load_model(skin_model_path, compile=False)
-    print('Skin disease model loaded successfully!')
+try:
+    import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+    import fitz
 
-tb_model_path = 'chest_tuberculosis_model.h5'
-if not os.path.exists(tb_model_path):
-    print(f'Warning: Tuberculosis model file not found: {tb_model_path}')
-    tb_model = None
-else:
-    tb_model = keras.models.load_model(tb_model_path, compile=False)
-    print('Tuberculosis model loaded successfully!')
+    heart_model_path = os.path.join(os.path.dirname(__file__), 'Blood_Reports', 'HeartDiseaseModel.h5')
+    if not os.path.exists(heart_model_path):
+        heart_model_path = 'Blood_Reports/HeartDiseaseModel.h5'
 
-from flask_cors import CORS
-CORS(app)
+    if os.path.exists(heart_model_path):
+        heart_model = keras.models.load_model(heart_model_path, compile=False)
+        print('Heart disease model loaded successfully!')
+    else:
+        print('Warning: Heart disease model not found, /predict-blood will be unavailable')
+
+    dataset_path = os.path.join(os.path.dirname(__file__), 'dataset', 'BloodReport_HeartDeseise', 'heart_cleveland_upload.csv')
+    if not os.path.exists(dataset_path):
+        dataset_path = 'dataset/BloodReport_HeartDeseise/heart_cleveland_upload.csv'
+
+    if os.path.exists(dataset_path):
+        heart_df = pd.read_csv(dataset_path).dropna()
+        heart_scaler = StandardScaler()
+        heart_features = heart_df.drop('condition', axis=1).columns.tolist()
+        heart_scaler.fit(heart_df[heart_features])
+        print('Heart disease scaler fitted successfully!')
+    else:
+        print('Warning: Heart dataset not found')
+
+except Exception as e:
+    print(f'Warning: Heart disease module failed to initialize: {e}')
+
+feature_good_ranges = {
+    'age': (0, 50),
+    'chol': (0, 200),
+    'trestbps': (90, 120),
+    'thalach': (100, 200),
+    'fbs': (0, 0),
+    'exang': (0, 0),
+    'oldpeak': (0, 1),
+    'ca': (0, 0),
+}
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'})
 
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'image' not in request.files:
         return jsonify({'error': 'No image provided'}), 400
-    
+
     file = request.files['image']
     scan_type = request.form.get('scanType')
     body_part = request.form.get('bodyPart')
@@ -69,7 +102,7 @@ def predict():
         image_bytes = file.read()
         img = Image.open(io.BytesIO(image_bytes))
         img = img.convert('RGB')
-        
+
         if scan_type and body_part:
             if scan_type.lower() == 'mri' and body_part.lower() == 'brain':
                 target_size = (150, 150)
@@ -89,7 +122,10 @@ def predict():
             target_size = (224, 224)
             model = skin_model
             classes = SKIN_DISEASE_CLASSES
-            
+
+        if model is None:
+            return jsonify({'error': 'Model not available for this scan type'}), 503
+
         img = img.resize(target_size)
         img_array = np.array(img)
         img_array = img_array.astype('float32') / 255.0
@@ -104,40 +140,16 @@ def predict():
             'class': predicted_class,
             'confidence': confidence
         })
- 
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
-import fitz  
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
-heart_model_path = './Reports/Blood_Reports/HeartDiseaseModel.h5'
-if not os.path.exists(heart_model_path):
-    raise FileNotFoundError(f'Heart disease model file not found: {heart_model_path}')
-
-heart_model = keras.models.load_model(heart_model_path, compile=False)
-print('Heart disease model loaded successfully!')
-
-heart_df = pd.read_csv("./dataset/BloodReport_HeartDeseise/heart_cleveland_upload.csv").dropna()
-heart_scaler = StandardScaler()
-heart_features = heart_df.drop('condition', axis=1).columns.tolist()
-heart_scaler.fit(heart_df[heart_features])
-
-feature_good_ranges = {
-    'age': (0, 50),
-    'chol': (0, 200),
-    'trestbps': (90, 120),
-    'thalach': (100, 200),
-    'fbs': (0, 0),  
-    'exang': (0, 0),  
-    'oldpeak': (0, 1),
-    'ca': (0, 0),
-}
-
 @app.route('/predict-blood', methods=['POST'])
 def predict_blood():
+    if heart_model is None or heart_scaler is None or heart_features is None:
+        return jsonify({'error': 'Heart disease model not available'}), 503
+
     if 'report' not in request.files:
         return jsonify({'error': 'No report file uploaded'}), 400
 
@@ -146,6 +158,7 @@ def predict_blood():
         return jsonify({'error': 'Empty filename'}), 400
 
     try:
+        import fitz
         pdf_bytes = file.read()
         pdf = fitz.open(stream=pdf_bytes, filetype="pdf")
         text = "\n".join([page.get_text() for page in pdf])
@@ -162,9 +175,7 @@ def predict_blood():
                         found = True
                         break
             if not found:
-                input_data.append(0.0)  
-
-        print('DEBUG input_data:', dict(zip(heart_features, input_data)))
+                input_data.append(0.0)
 
         if len(input_data) != len(heart_features):
             return jsonify({'error': 'Incomplete data extracted'}), 400
@@ -177,7 +188,6 @@ def predict_blood():
                     healthy = False
                     break
         if healthy:
-            print('DEBUG: All features in good range, overriding to No Heart Disease')
             return jsonify({
                 'status': 'success',
                 'prediction': 'No Heart Disease',
@@ -187,7 +197,6 @@ def predict_blood():
 
         input_scaled = heart_scaler.transform([input_data])
         prediction = heart_model.predict(input_scaled)[0][0]
-        print('DEBUG model prediction:', prediction)
         result = "Heart Disease Detected" if prediction > 0.5 else "No Heart Disease"
         confidence = prediction if prediction > 0.5 else 1 - prediction
 
@@ -199,8 +208,9 @@ def predict_blood():
         })
 
     except Exception as e:
-        print('DEBUG ERROR:', str(e))
         return jsonify({'error': str(e)}), 500
 
+
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
