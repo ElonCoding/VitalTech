@@ -12,7 +12,21 @@ const path = require('path');
 const otpStore = {};
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: function (origin, callback) {
+        const allowed = [
+            'http://localhost:5173',
+            'http://localhost:3000',
+            process.env.FRONTEND_URL,
+        ].filter(Boolean);
+        if (!origin || allowed.some(o => origin.startsWith(o)) || origin.includes('vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
 
 mongoose.connect(process.env.MONGODB_URI)
   

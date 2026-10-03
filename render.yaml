@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: vitaltech-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        value: https://frontend-green-eight-6sryntgmnu.vercel.app
+      - key: PORT
+        value: 3001
