@@ -303,8 +303,6 @@ python Server.py
 *Founder, Chief AI Architect & Full-Stack Systems Engineer*
 
 [![GitHub](https://img.shields.io/badge/GitHub-ElonCoding-181717?style=for-the-badge&logo=github)](https://github.com/ElonCoding)
-[![Email](https://img.shields.io/badge/Email-sharmaparikshit405%40gmail.com-D14836?style=for-the-badge&logo=gmail)](mailto:sharmaparikshit405@gmail.com)
-[![Phone](https://img.shields.io/badge/Phone-%2B91%208817763021-25D366?style=for-the-badge&logo=whatsapp)](tel:+918817763021)
 
 *VitalTech was conceived, architected, and built from the ground up by Parikshit Sharma to democratize high-accuracy clinical artificial intelligence for global healthcare systems.*
 
@@ -316,4 +314,4 @@ python Server.py
 
 This software is released under the **MIT License**. See [LICENSE](LICENSE) for details.
 
-© 2026 **VitalTech**. Engineered by **Parikshit Sharma**. All rights reserved.
+© 2025-26 **VitalTech**. Engineered by **Parikshit Sharma**. All rights reserved.
