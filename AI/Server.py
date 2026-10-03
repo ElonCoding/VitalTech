@@ -82,6 +82,13 @@ feature_good_ranges = {
     'ca': (0, 0),
 }
 
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        'status': 'VitalTech AI Service is running',
+        'endpoints': ['/health', '/predict', '/predict-blood']
+    })
+
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({'status': 'ok'})
