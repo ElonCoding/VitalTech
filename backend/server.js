@@ -278,9 +278,21 @@ app.delete('/patients/:id', async (req, res) => {
     }
     
 });
+
+// Health check endpoint
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    // Self-ping every 14 min to prevent Render free tier from sleeping
+    if (process.env.RENDER_EXTERNAL_URL) {
+        setInterval(() => {
+            fetch(`${process.env.RENDER_EXTERNAL_URL}/health`)
+                .then(() => console.log('Keep-alive ping sent'))
+                .catch(err => console.error('Keep-alive failed:', err.message));
+        }, 14 * 60 * 1000);
+    }
 });
 
 module.exports = app;
