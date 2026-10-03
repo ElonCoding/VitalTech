@@ -6,6 +6,8 @@ import { useUser } from '../../../context/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 
+import { API_BASE_URL } from '../../../config/api';
+
 function Login() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +27,6 @@ function Login() {
     };
 
     const { setUserRole, setName, setEmail } = useUser();
-
     const [error, setError] = useState('');
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ function Login() {
         setError('');
         setLoading(true);
         
-        axios.post('http://localhost:3001/login', {
+        axios.post(`${API_BASE_URL}/login`, {
             email: formData.email,
             password: formData.password
         })
@@ -57,7 +58,7 @@ function Login() {
         .catch(err => {
             setLoading(false);
             if (err.code === 'ERR_NETWORK' || err.message?.includes('Network Error')) {
-                setError('Cannot connect to server. Please ensure the backend is running on port 3001.');
+                setError('Cannot connect to server. Please ensure backend is running or set VITE_API_URL.');
             } else if (err.response?.data) {
                 setError(err.response.data.error || 'Invalid email or password.');
             } else {

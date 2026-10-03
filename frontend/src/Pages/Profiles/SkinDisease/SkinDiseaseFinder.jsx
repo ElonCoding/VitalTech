@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { jsPDF } from 'jspdf';
 import './SkinDiseaseFinder.css';
+import { AI_BASE_URL } from '../../../config/api';
 
 function SkinDiseaseFinder() {
   const [isDragging, setIsDragging] = useState(false);
@@ -97,7 +98,7 @@ function SkinDiseaseFinder() {
     formData.append('scanType', 'skin');
 
     try {
-      const response = await fetch('http://localhost:5000/predict', {
+      const response = await fetch(`${AI_BASE_URL}/predict`, {
         method: 'POST',
         body: formData,
       });

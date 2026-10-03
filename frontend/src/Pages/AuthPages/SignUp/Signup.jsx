@@ -4,6 +4,7 @@ import './Signup.css';
 import { FaCheck, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import SuccessModal, { LoadingSpinner } from '../../../Components/SuccessModal/SuccessModal';
+import { API_BASE_URL } from '../../../config/api';
 
 function Signup() {
     const navigate = useNavigate();
@@ -95,7 +96,7 @@ function Signup() {
         }
 
         try {
-            const response = await axios.post('http://localhost:3001/register', {
+            const response = await axios.post(`${API_BASE_URL}/register`, {
                 name: formData.name,
                 username: formData.username,
                 email: formData.email,
@@ -113,7 +114,7 @@ function Signup() {
             if (error.code === 'ERR_NETWORK' || error.message?.includes('Network Error')) {
                 setErrors(prev => ({
                     ...prev,
-                    submit: 'Cannot connect to server. Please ensure the backend is running on port 3001.'
+                    submit: 'Cannot connect to server. Please ensure backend is running or set VITE_API_URL.'
                 }));
             } else {
                 setErrors(prev => ({

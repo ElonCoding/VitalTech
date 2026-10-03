@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './Reportsr.css';
 import { jsPDF } from 'jspdf';
+import { AI_BASE_URL } from '../../../config/api';
 
 const REPORT_TYPES = [
   {
@@ -120,7 +121,7 @@ function DiseaseFinderReports() {
       formData.append('report', file);
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:5000/predict-blood', {
+        const res = await fetch(`${AI_BASE_URL}/predict-blood`, {
           method: 'POST',
           body: formData,
         });
@@ -132,7 +133,7 @@ function DiseaseFinderReports() {
         }
       } catch (err) {
         if (err.name === 'TypeError' && err.message?.includes('Failed to fetch')) {
-          setError('Cannot connect to AI server. Please ensure the Python server is running on port 5000 (run: python Server.py).');
+          setError('Cannot connect to AI server. Please ensure AI server is running or set VITE_AI_URL.');
         } else {
           setError('Something went wrong while processing the report.');
         }

@@ -16,8 +16,8 @@ import {
 import axios from 'axios';
 import './Pateints.css';
 import { FaEye, FaEyeSlash, FaRegCopy } from 'react-icons/fa';
+import { API_BASE_URL as BACKEND_URL } from '../../../config/api';
 
-const BACKEND_URL = 'http://localhost:3001';
 function getPatientImage(profileImage) {
   if (!profileImage || profileImage === '/uploads/default-user.png') {
     return '/default-user.png'; 
@@ -85,7 +85,7 @@ function Patients() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3001/patients')
+    axios.get(`${BACKEND_URL}/patients`)
       .then(res => setPatients(res.data.patients))
       .catch(() => setPatients([]));
   }, []);
@@ -131,7 +131,7 @@ function Patients() {
           formData.append(key, value);
         }
       });
-      const res = await axios.post('http://localhost:3001/register-patient', formData, {
+      const res = await axios.post(`${BACKEND_URL}/register-patient`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setGeneratedCredentials(res.data.patient);
@@ -157,7 +157,7 @@ function Patients() {
       setFormErrors({});
     } catch (err) {
       if (err.code === 'ERR_NETWORK' || err.message?.includes('Network Error')) {
-        setFormErrors({ submit: 'Cannot connect to server. Please ensure the backend is running on port 3001.' });
+        setFormErrors({ submit: 'Cannot connect to server. Please ensure backend is running or set VITE_API_URL.' });
       } else {
         setFormErrors({ submit: err.response?.data?.error || 'Failed to register patient. Please try again.' });
       }
@@ -171,7 +171,7 @@ function Patients() {
       return;
     }
     try {
-      const res = await axios.patch(`http://localhost:3001/patients/${selectedPatient._id}/password`, { newPassword: passwordChange });
+      const res = await axios.patch(`${BACKEND_URL}/patients/${selectedPatient._id}/password`, { newPassword: passwordChange });
       setPasswordChangeSuccess('Password updated!');
       setPasswordChangeError('');
       setSelectedPatient(prev => ({ ...prev, _plainPassword: res.data.patient.plainPassword }));
@@ -197,7 +197,7 @@ function Patients() {
     const confirm = window.confirm('Are you sure you want to delete this patient? This action cannot be undone.');
     if (!confirm) return;
     try {
-      await axios.delete(`http://localhost:3001/patients/${id}`);
+      await axios.delete(`${BACKEND_URL}/patients/${id}`);
       setPatients(prev => prev.filter(p => p._id !== id));
     } catch (err) {
       alert('Failed to delete patient.');

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LoadingSpinner } from '../../../Components/SuccessModal/SuccessModal';
 import { FaCheck, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { API_BASE_URL } from '../../../config/api';
 
 function Forgot_Password() {
     const [step, setStep] = useState(1);
@@ -26,12 +27,12 @@ function Forgot_Password() {
         e.preventDefault();
         setError(''); setSuccess(''); setLoading(true);
         try {
-            const res = await axios.post('http://localhost:3001/forgot-password', { email });
+            const res = await axios.post(`${API_BASE_URL}/forgot-password`, { email });
             setSuccess('OTP sent to your email.');
             setStep(2);
         } catch (err) {
             if (err.code === 'ERR_NETWORK' || err.message?.includes('Network Error')) {
-                setError('Cannot connect to server. Please ensure the backend is running on port 3001.');
+                setError('Cannot connect to server. Please ensure backend is running or set VITE_API_URL.');
             } else {
                 setError(err.response?.data?.error || 'Failed to send OTP');
             }
@@ -60,12 +61,12 @@ function Forgot_Password() {
         setError(''); setSuccess(''); setLoading(true);
         try {
             await new Promise(res => setTimeout(res, 1200)); // Add delay
-            const res = await axios.post('http://localhost:3001/verify-otp', { email, otp });
+            const res = await axios.post(`${API_BASE_URL}/verify-otp`, { email, otp });
             setSuccess('OTP verified. You can now reset your password.');
             setStep(3);
         } catch (err) {
             if (err.code === 'ERR_NETWORK' || err.message?.includes('Network Error')) {
-                setError('Cannot connect to server. Please ensure the backend is running on port 3001.');
+                setError('Cannot connect to server. Please ensure backend is running or set VITE_API_URL.');
             } else {
                 setError(err.response?.data?.error || 'Invalid OTP');
             }
@@ -92,12 +93,12 @@ function Forgot_Password() {
             return;
         }
         try {
-            await axios.post('http://localhost:3001/reset-password', { email, otp, newPassword });
+            await axios.post(`${API_BASE_URL}/reset-password`, { email, otp, newPassword });
             setSuccess('Password reset successful! You can now log in.');
             setStep(4);
         } catch (err) {
             if (err.code === 'ERR_NETWORK' || err.message?.includes('Network Error')) {
-                setError('Cannot connect to server. Please ensure the backend is running on port 3001.');
+                setError('Cannot connect to server. Please ensure backend is running or set VITE_API_URL.');
             } else {
                 setError(err.response?.data?.error || 'Failed to reset password');
             }

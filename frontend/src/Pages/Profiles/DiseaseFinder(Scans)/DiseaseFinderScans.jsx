@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { jsPDF } from 'jspdf';
 import './Reportss.css';
+import { AI_BASE_URL } from '../../../config/api';
 
 const SCAN_TYPES = [
   {
@@ -133,7 +134,7 @@ function DiseaseFinderScans() {
     formData.append('scanType', scanType.key);
     formData.append('bodyPart', bodyPart.key);
     try {
-      const response = await fetch('http://localhost:5000/predict', {
+      const response = await fetch(`${AI_BASE_URL}/predict`, {
         method: 'POST',
         body: formData,
       });
@@ -142,7 +143,7 @@ function DiseaseFinderScans() {
       setPrediction(data);
     } catch (err) {
       if (err.name === 'TypeError' && err.message?.includes('Failed to fetch')) {
-        setError('Cannot connect to AI server. Please ensure the Python server is running on port 5000 (run: python Server.py).');
+        setError('Cannot connect to AI server. Please ensure AI server is running or set VITE_AI_URL.');
       } else {
         setError(err.message || 'Failed to analyze the image');
       }
