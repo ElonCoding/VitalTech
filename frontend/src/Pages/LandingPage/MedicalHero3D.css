@@ -1,0 +1,205 @@
+.medical-3d-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    height: 520px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    user-select: none;
+}
+
+.medical-3d-canvas-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    touch-action: none;
+    position: relative;
+    z-index: 2;
+}
+
+.medical-3d-canvas-container:active {
+    cursor: grabbing;
+}
+
+.medical-3d-canvas-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
+    filter: drop-shadow(0 0 35px rgba(14, 165, 233, 0.35));
+}
+
+/* Glassmorphism Hologram HUD Chips */
+.hologram-chip {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    animation: floatChip 4s ease-in-out infinite;
+}
+
+.chip-top-right {
+    top: 15px;
+    right: 10px;
+}
+
+.chip-bottom-left {
+    bottom: 20px;
+    left: 10px;
+    border-radius: 16px;
+    padding: 0.7rem 1.1rem;
+}
+
+.chip-bottom-right {
+    bottom: 20px;
+    right: 15px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.chip-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.chip-text strong {
+    font-size: 0.88rem;
+    color: #f8fafc;
+    letter-spacing: 0.02em;
+}
+
+.chip-text small {
+    font-size: 0.72rem;
+    color: #38bdf8;
+    margin-top: 1px;
+}
+
+.chip-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.chip-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(16, 185, 129, 0.3));
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    color: #38bdf8;
+}
+
+/* Pulsing Dots */
+.chip-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.pulse-green {
+    background: #10b981;
+    box-shadow: 0 0 12px #10b981;
+    animation: indicatorPulse 2s infinite;
+}
+
+.pulse-cyan {
+    background: #0ea5e9;
+    box-shadow: 0 0 12px #0ea5e9;
+    animation: indicatorPulse 2s infinite 0.5s;
+}
+
+@keyframes indicatorPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 0.6;
+    }
+}
+
+@keyframes floatChip {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* WebGL Fallback */
+.medical-3d-fallback {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(16, 185, 129, 0.05) 70%, transparent 100%);
+    border: 2px dashed rgba(56, 189, 248, 0.3);
+    position: relative;
+    text-align: center;
+    color: #ffffff;
+}
+
+.fallback-dna-icon {
+    font-size: 4rem;
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.fallback-pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    animation: pingRing 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pingRing {
+    75%, 100% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .medical-3d-wrapper {
+        height: 380px;
+        max-width: 100%;
+    }
+    .chip-top-right {
+        top: 5px;
+        right: 5px;
+        font-size: 0.75rem;
+    }
+    .chip-bottom-left {
+        bottom: 5px;
+        left: 5px;
+        padding: 0.4rem 0.8rem;
+    }
+    .chip-bottom-right {
+        display: none;
+    }
+}

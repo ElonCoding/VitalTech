@@ -1,6 +1,6 @@
 import './Style.css';
 import { useNavigate } from 'react-router-dom';
-import doctor from '../../assets/images/hero-doctor.png';
+import MedicalHero3D from './MedicalHero3D';
 
 function HomePage() {
     const navigate = useNavigate();
@@ -18,9 +18,7 @@ function HomePage() {
                         </div>
                     </div>
                     <div className="hero-content-right">
-                        <div className="hero-image">
-                            <img src={doctor} draggable='false' alt="Healthcare Professional" />
-                        </div>
+                        <MedicalHero3D />
                     </div>
                 </div>
             </section>
